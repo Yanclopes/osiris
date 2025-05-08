@@ -9,14 +9,14 @@ class CreateAccountsTable extends Migration
     public function up()
     {
         Schema::create('accounts', function (Blueprint $table) {
-            $table->id('acc_id');
-            $table->string('acc_name');
-            $table->string('acc_type');
-            $table->decimal('acc_balance', 10, 2);
-            $table->timestamp('acc_created_at')->nullable();
-            
+            $table->id();
+            $table->string('name');
+            $table->string('type');
+            $table->decimal('balance', 10, 2);
+            $table->timestamps();
+
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('usu_id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -24,6 +24,4 @@ class CreateAccountsTable extends Migration
     {
         Schema::dropIfExists('accounts');
     }
-
-    
 }

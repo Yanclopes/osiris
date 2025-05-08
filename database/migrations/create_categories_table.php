@@ -9,10 +9,12 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id('cat_id');
-            $table->string('cat_name');
-            $table->string('cat_type');
-            $table->timestamp('cat_created_at')->nullable();
+            $table->id();
+            $table->string('name');
+            $table->string('type');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -21,5 +23,5 @@ class CreateCategoriesTable extends Migration
         Schema::dropIfExists('categories');
     }
 
-    
+
 }

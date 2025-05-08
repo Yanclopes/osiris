@@ -2,27 +2,57 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model {
+class User extends Authenticatable
+{
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
-        'usu_name', 'usu_email', 'usu_password', 'usu_created_at',
+        'name',
+        'email',
+        'password',
     ];
 
-    public $timestamps = false;
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
     public function accounts()
     {
-        return $this->hasMany(Account::class, 'user_id', 'usu_id');
+        return $this->hasMany(Account::class);
     }
 
-    public static function saveUser($data)
+    public function categories()
     {
-        return self::create([
-            'usu_name' => $data['usu_name'],
-            'usu_email' => $data['usu_email'],
-            'usu_password' => bcrypt($data['usu_password']),
-            'usu_created_at' => $data['usu_created_at'],
-        ]);
+        return $this->hasMany(Category::class);
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }

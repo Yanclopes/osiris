@@ -6,22 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model {
     protected $fillable = [
-        'cat_name', 'cat_type', 'cat_created_at',
+        'name', 'type', 'user_id'
     ];
 
-    public $timestamps = false;
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function transactions()
     {
-        return $this->hasMany(Transaction::class, 'category_id', 'cat_id');
-    }
-
-    public static function saveCategory($data)
-    {
-        return self::create([
-            'cat_name' => $data['cat_name'],
-            'cat_type' => $data['cat_type'],
-            'cat_created_at' => $data['cat_created_at'],
-        ]);
+        return $this->hasMany(Transaction::class);
     }
 }
