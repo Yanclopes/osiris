@@ -16,6 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
     Route::get('transaction', [\App\Http\Controllers\TransactionController::class, 'index'])->name('transaction');
+    Route::post('transaction', [\App\Http\Controllers\TransactionController::class, 'store'])->name('transaction');
 });
 
 require __DIR__.'/settings.php';

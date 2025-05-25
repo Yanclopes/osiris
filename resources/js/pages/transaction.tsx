@@ -8,6 +8,11 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Pagination } from '@/components/pagination';
 import { Transaction as TransactionEntity, TransactionType } from '@/types/entities/Transaction';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from 'lucide-react';
+import { Modal } from '@/components/modal';
+import { TransactionForm } from '@/components/Form/Transaction/TransactionForm';
+import { TransactionCreate } from '@/components/Form/Transaction/TransactionCreate';
 
 export const columns: ColumnDef<TransactionEntity>[] = [
     {
@@ -52,6 +57,10 @@ export default function Transaction() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Transaction" />
             <div className="space-y-4">
+                <div className={'flex justify-between py-3'}>
+                    <div></div>
+                    <TransactionCreate/>
+                </div>
                 <Table columns={columns} />
                 <Pagination/>
             </div>
