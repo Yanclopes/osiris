@@ -64,7 +64,7 @@ export function useAppearance() {
 
     useEffect(() => {
         const savedAppearance = localStorage.getItem('appearance') as Appearance | null;
-        updateAppearance(savedAppearance || 'system');
+        updateAppearance(savedAppearance || 'dark');
 
         return () => mediaQuery()?.removeEventListener('change', handleSystemThemeChange);
     }, [updateAppearance]);
