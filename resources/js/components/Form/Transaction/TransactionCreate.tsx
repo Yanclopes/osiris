@@ -4,12 +4,19 @@ import { TransactionForm } from '@/components/Form/Transaction/TransactionForm';
 import { Modal } from '@/components/modal';
 import { useForm } from '@inertiajs/react';
 import { TransactionType } from '@/types/entities/Transaction';
-export const TransactionCreate = () => {
+import type { Category } from '@/types/entities/Category';
+
+interface TransactionCreateProps {
+    categories: Category[];
+}
+
+export const TransactionCreate = ({ categories }: TransactionCreateProps) => {
     const form = useForm({
         type: TransactionType.EXPENSE,
         value: '',
         description: '',
-    })
+        category_id: '',
+    });
 
     return (
         <Modal
@@ -24,17 +31,18 @@ export const TransactionCreate = () => {
             {(close) => (
                 <TransactionForm
                     form={form}
+                    categories={categories}
                     onSubmit={() => {
                         form.post('/transaction', {
                             onSuccess: () => {
                                 close();
-                                form.reset()
+                                form.reset();
                             },
                         });
                     }}
                     onClose={() => {
                         close();
-                        form.reset()
+                        form.reset();
                     }}
                 />
             )}

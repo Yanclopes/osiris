@@ -12,18 +12,22 @@ use App\Models\Transaction;
 class TransactionController extends Controller
 {
     public function index()
-    {
-        $userId = Auth::id();
+{
+    $userId = Auth::id();
+    
+    $categories = Category::where('user_id', $userId)->get();
 
-        $transactions = Transaction::whereHas('account', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })
-            ->paginate(10);
+    $transactions = Transaction::with('category')
+    ->whereHas('account', function ($query) use ($userId) {
+        $query->where('user_id', $userId);
+    })
+    ->paginate(10);
 
-        return Inertia::render('transaction', [
-            'items' => $transactions,
-        ]);
-    }
+    return Inertia::render('transaction', [
+        'items' => $transactions,
+        'categories' => $categories,
+    ]);
+}
 
     public function store(Request $request)
     {
@@ -40,7 +44,6 @@ class TransactionController extends Controller
 
         $numericValue = str_replace(',', '.', $validated['value']);
 
-        // Criação da transação via Eloquent
         Transaction::create([
             'account_id' => $account->id,
             'category_id' => $category->id,

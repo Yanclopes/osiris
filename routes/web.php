@@ -17,6 +17,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     Route::get('transaction', [\App\Http\Controllers\TransactionController::class, 'index'])->name('transaction');
     Route::post('transaction', [\App\Http\Controllers\TransactionController::class, 'store'])->name('transaction');
+
+    Route::get('category', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category');
 });
 
 require __DIR__.'/settings.php';

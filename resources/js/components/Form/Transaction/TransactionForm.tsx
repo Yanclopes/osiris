@@ -1,12 +1,14 @@
 import { TransactionType } from '@/types/entities/Transaction';
-import { Input } from '@/components/ui/input'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import type { Category } from '@/types/entities/Category';
 
 interface FormData {
     type: TransactionType;
     value: string;
     description: string;
+    category_id: string;  // ✅ Adicionado
 }
 
 interface TransactionFormProps {
@@ -16,11 +18,12 @@ interface TransactionFormProps {
         errors: Partial<Record<keyof FormData, string>>;
         processing: boolean;
     };
+    categories: Category[];   // ✅ Receber as categorias
     onSubmit: (data: FormData) => void;
     onClose: () => void;
 }
 
-export const TransactionForm = ({ form, onSubmit, onClose }: TransactionFormProps) => {
+export const TransactionForm = ({ form, categories, onSubmit, onClose }: TransactionFormProps) => {
     const { data, setData, errors, processing } = form;
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -48,15 +51,35 @@ export const TransactionForm = ({ form, onSubmit, onClose }: TransactionFormProp
             </div>
 
             <div>
+                <label className="block mb-1 text-sm font-medium">Category</label>
+                <Select
+                    value={data.category_id}
+                    onValueChange={(value) => setData('category_id', value)}
+                >
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {categories.map((category) => (
+                            <SelectItem key={category.id} value={String(category.id)}>
+                                {category.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                {errors.category_id && <p className="text-red-500 text-sm mt-1">{errors.category_id}</p>}
+            </div>
+
+            <div>
                 <label className="block mb-1 text-sm font-medium">Value (R$)</label>
                 <Input
                     type="text"
                     inputMode="decimal"
                     value={data.value}
                     onChange={(e) => {
-                        const raw = e.target.value.replace(/\D/g, '')
-                        const formatted = (Number(raw) / 100).toFixed(2).replace('.', ',')
-                        setData('value', formatted)
+                        const raw = e.target.value.replace(/\D/g, '');
+                        const formatted = (Number(raw) / 100).toFixed(2).replace('.', ',');
+                        setData('value', formatted);
                     }}
                     placeholder="0,00"
                 />

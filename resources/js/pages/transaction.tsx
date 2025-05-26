@@ -14,6 +14,15 @@ import { Modal } from '@/components/modal';
 import { TransactionForm } from '@/components/Form/Transaction/TransactionForm';
 import { TransactionCreate } from '@/components/Form/Transaction/TransactionCreate';
 
+import type { Category } from '@/types/entities/Category';
+
+interface TransactionPageProps {
+    items: {
+        data: TransactionEntity[];
+    };
+    categories: Category[];
+}
+
 export const columns: ColumnDef<TransactionEntity>[] = [
     {
         accessorKey: 'id',
@@ -24,6 +33,10 @@ export const columns: ColumnDef<TransactionEntity>[] = [
         accessorKey: 'description',
         header: 'Description',
         cell: info => info.getValue(),
+    },
+    {
+        header: 'Category',
+        accessorFn: row => row.category?.name ?? '—',
     },
     {
         accessorKey: 'type',
@@ -45,7 +58,7 @@ export const columns: ColumnDef<TransactionEntity>[] = [
     },
 ];
 
-export default function Transaction() {
+export default function Transaction({ items, categories }: TransactionPageProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Transaction',
@@ -59,10 +72,10 @@ export default function Transaction() {
             <div className="space-y-4">
                 <div className={'flex justify-between py-3'}>
                     <div></div>
-                    <TransactionCreate/>
+                    <TransactionCreate categories={categories} />
                 </div>
                 <Table columns={columns} />
-                <Pagination/>
+                <Pagination />
             </div>
         </AppLayout>
     )

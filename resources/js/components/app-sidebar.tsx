@@ -17,6 +17,11 @@ const mainNavItems: NavItem[] = [
         href: '/transaction',
         icon: DollarSign,
     },
+    {
+        title: 'Category',
+        href: '/category',
+        icon: DollarSign,
+    },
 ];
 
 export function AppSidebar() {
