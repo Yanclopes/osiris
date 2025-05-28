@@ -19,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('transaction', [\App\Http\Controllers\TransactionController::class, 'store'])->name('transaction');
 
     Route::get('category', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category');
+    Route::post('category', [\App\Http\Controllers\CategoryController::class, 'store'])->name('category.store');
 });
 
 require __DIR__.'/settings.php';

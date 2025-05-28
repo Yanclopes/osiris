@@ -3,12 +3,14 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import type { Category } from '@/types/entities/Category';
+import type { Account } from '@/types/entities/Account';
 
 interface FormData {
     type: TransactionType;
     value: string;
     description: string;
-    category_id: string;  // ✅ Adicionado
+    category_id: string;
+    account_id: string;
 }
 
 interface TransactionFormProps {
@@ -18,12 +20,13 @@ interface TransactionFormProps {
         errors: Partial<Record<keyof FormData, string>>;
         processing: boolean;
     };
-    categories: Category[];   // ✅ Receber as categorias
+    categories: Category[];
+    accounts: Account[];
     onSubmit: (data: FormData) => void;
     onClose: () => void;
 }
 
-export const TransactionForm = ({ form, categories, onSubmit, onClose }: TransactionFormProps) => {
+export const TransactionForm = ({ form, categories, accounts, onSubmit, onClose }: TransactionFormProps) => {
     const { data, setData, errors, processing } = form;
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -34,12 +37,12 @@ export const TransactionForm = ({ form, categories, onSubmit, onClose }: Transac
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-                <label className="block mb-1 text-sm font-medium">Type</label>
+                <label className="block mb-1 text-sm font-medium text-white">Type</label>
                 <Select
                     value={data.type}
                     onValueChange={(value) => setData('type', value as TransactionType)}
                 >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400">
                         <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -51,27 +54,41 @@ export const TransactionForm = ({ form, categories, onSubmit, onClose }: Transac
             </div>
 
             <div>
-                <label className="block mb-1 text-sm font-medium">Category</label>
-                <Select
-                    value={data.category_id}
-                    onValueChange={(value) => setData('category_id', value)}
+                <label className="block mb-1 text-sm font-medium text-white">Category</label>
+                <select
+                    name="category_id"
+                    value={form.data.category_id ?? ''}
+                    onChange={e => form.setData('category_id', e.target.value)}
+                    required
+                    className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
                 >
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {categories.map((category) => (
-                            <SelectItem key={category.id} value={String(category.id)}>
-                                {category.name}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                    <option value="">Selecione uma categoria</option>
+                    {categories.map(cat => (
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                </select>
                 {errors.category_id && <p className="text-red-500 text-sm mt-1">{errors.category_id}</p>}
             </div>
 
             <div>
-                <label className="block mb-1 text-sm font-medium">Value (R$)</label>
+                <label className="block mb-1 text-sm font-medium text-white">Account</label>
+                <select
+                    name="account_id"
+                    value={data.account_id ?? ''}
+                    onChange={e => setData('account_id', e.target.value)}
+                    required
+                    className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
+                >
+                    <option value="">Selecione uma conta</option>
+                    {accounts.map(acc => (
+                        <option key={acc.id} value={acc.id}>{acc.name}</option>
+                    ))}
+                </select>
+                {errors.account_id && <p className="text-red-500 text-sm mt-1">{errors.account_id}</p>}
+            </div>
+
+            <div>
+                <label className="block mb-1 text-sm font-medium text-white">Value (R$)</label>
                 <Input
                     type="text"
                     inputMode="decimal"
@@ -82,17 +99,19 @@ export const TransactionForm = ({ form, categories, onSubmit, onClose }: Transac
                         setData('value', formatted);
                     }}
                     placeholder="0,00"
+                    className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
                 />
                 {errors.value && <p className="text-red-500 text-sm mt-1">{errors.value}</p>}
             </div>
 
             <div>
-                <label className="block mb-1 text-sm font-medium">Description</label>
+                <label className="block mb-1 text-sm font-medium text-white">Description</label>
                 <Input
                     type="text"
                     value={data.description}
                     onChange={(e) => setData('description', e.target.value)}
                     placeholder="Ex: Lunch at restaurant"
+                    className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
                 />
                 {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
             </div>

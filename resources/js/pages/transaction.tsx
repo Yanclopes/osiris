@@ -15,12 +15,12 @@ import { TransactionForm } from '@/components/Form/Transaction/TransactionForm';
 import { TransactionCreate } from '@/components/Form/Transaction/TransactionCreate';
 
 import type { Category } from '@/types/entities/Category';
+import type { Account } from '@/types/entities/Account';
 
 interface TransactionPageProps {
-    items: {
-        data: TransactionEntity[];
-    };
+    items: { data: TransactionEntity[] };
     categories: Category[];
+    accounts: Account[];
 }
 
 export const columns: ColumnDef<TransactionEntity>[] = [
@@ -58,7 +58,7 @@ export const columns: ColumnDef<TransactionEntity>[] = [
     },
 ];
 
-export default function Transaction({ items, categories }: TransactionPageProps) {
+export default function Transaction({ items, categories, accounts }: TransactionPageProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Transaction',
@@ -72,7 +72,7 @@ export default function Transaction({ items, categories }: TransactionPageProps)
             <div className="space-y-4">
                 <div className={'flex justify-between py-3'}>
                     <div></div>
-                    <TransactionCreate categories={categories} />
+                    <TransactionCreate categories={categories} accounts={accounts} />
                 </div>
                 <Table columns={columns} />
                 <Pagination />

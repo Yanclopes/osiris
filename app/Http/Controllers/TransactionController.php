@@ -16,6 +16,7 @@ class TransactionController extends Controller
     $userId = Auth::id();
     
     $categories = Category::where('user_id', $userId)->get();
+    $accounts = Account::where('user_id', $userId)->get();
 
     $transactions = Transaction::with('category')
     ->whereHas('account', function ($query) use ($userId) {
@@ -26,6 +27,7 @@ class TransactionController extends Controller
     return Inertia::render('transaction', [
         'items' => $transactions,
         'categories' => $categories,
+        'accounts' => $accounts,
     ]);
 }
 
@@ -33,22 +35,19 @@ class TransactionController extends Controller
     {
         $userId = Auth::id();
 
-        $account = Account::find(1);
-        $category = Category::find(1);
-
         $validated = $request->validate([
+            'account_id' => 'required|exists:accounts,id', // aqui!
             'type' => 'required|in:income,expense',
             'value' => 'required|string',
             'description' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
-        $numericValue = str_replace(',', '.', $validated['value']);
-
         Transaction::create([
-            'account_id' => $account->id,
-            'category_id' => $category->id,
+            'account_id' => $validated['account_id'], // aqui!
+            'category_id' => $validated['category_id'],
             'type' => $validated['type'],
-            'value' => (float) $numericValue,
+            'value' => (float) str_replace(',', '.', $validated['value']),
             'description' => $validated['description'],
         ]);
 

@@ -1,43 +1,35 @@
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
-import { TransactionForm } from '@/components/Form/Transaction/TransactionForm';
 import { Modal } from '@/components/modal';
 import { useForm } from '@inertiajs/react';
-import { TransactionType } from '@/types/entities/Transaction';
-import type { Category } from '@/types/entities/Category';
-import type { Account } from '@/types/entities/Account';
+import { CategoryForm } from './CategoryForm';
 
-interface TransactionCreateProps {
-    categories: Category[];
-    accounts: Account[];
-}
+export type CategoryFormData = {
+    name: string;
+    description: string;
+};
 
-export const TransactionCreate = ({ categories, accounts }: TransactionCreateProps) => {
-    const form = useForm({
-        account_id: '',
-        type: TransactionType.EXPENSE,
-        value: '',
+export const CategoryCreate = () => {
+    const form = useForm<CategoryFormData>({
+        name: '',
         description: '',
-        category_id: '',
     });
 
     return (
         <Modal
-            title="Nova Transação"
+            title="Nova Categoria"
             trigger={
                 <Button>
                     <PlusIcon className="w-4 h-4 mr-2" />
-                    Add Transaction
+                    Add Category
                 </Button>
             }
         >
             {(close) => (
-                <TransactionForm
+                <CategoryForm
                     form={form}
-                    categories={categories}
-                    accounts={accounts}
                     onSubmit={() => {
-                        form.post('/transaction', {
+                        form.post('/category', {
                             onSuccess: () => {
                                 close();
                                 form.reset();
@@ -51,5 +43,5 @@ export const TransactionCreate = ({ categories, accounts }: TransactionCreatePro
                 />
             )}
         </Modal>
-    )
-}
+    );
+};

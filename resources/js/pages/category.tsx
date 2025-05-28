@@ -6,7 +6,7 @@ import { Head } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Pagination } from '@/components/pagination';
-// import { CategoryCreate } from '@/components/Form/Category/CategoryCreate'; // Descomente se existir
+import { CategoryCreate } from '@/components/Form/Category/CategoryCreate';
 
 type Category = {
     id: number;
@@ -45,7 +45,6 @@ interface CategoryPageProps {
         last_page: number;
         per_page: number;
         total: number;
-        // Adicione outros campos do paginator se necessário
     };
 }
 
@@ -63,6 +62,7 @@ export default function Category({ items }: CategoryPageProps) {
             <div className="space-y-4">
                 <div className={'flex justify-between py-3'}>
                     <div></div>
+                    <CategoryCreate />
                 </div>
                 <Table columns={columns} />
                 <Pagination />
