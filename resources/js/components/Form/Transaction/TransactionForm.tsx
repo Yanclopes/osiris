@@ -1,25 +1,22 @@
-import { TransactionType } from '@/types/entities/Transaction';
+import { Transaction, TransactionType } from '@/types/entities/Transaction';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import type { Category } from '@/types/entities/Category';
 import type { Account } from '@/types/entities/Account';
+import { InertiaFormProps } from '@inertiajs/react';
+import { NumericFormat } from 'react-number-format';
 
 interface FormData {
     type: TransactionType;
-    value: string;
+    value: number;
     description: string;
-    category_id: string;
-    account_id: string;
+    category_id: number;
+    account_id: number;
 }
 
 interface TransactionFormProps {
-    form: {
-        data: FormData;
-        setData: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
-        errors: Partial<Record<keyof FormData, string>>;
-        processing: boolean;
-    };
+    form: InertiaFormProps<Pick<Transaction, 'account_id' | 'type' | 'category_id' | 'description' | 'value'>>;
     categories: Category[];
     accounts: Account[];
     onSubmit: (data: FormData) => void;
@@ -58,7 +55,7 @@ export const TransactionForm = ({ form, categories, accounts, onSubmit, onClose 
                 <select
                     name="category_id"
                     value={form.data.category_id ?? ''}
-                    onChange={e => form.setData('category_id', e.target.value)}
+                    onChange={e => form.setData('category_id', Number(e.target.value))}
                     required
                     className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
                 >
@@ -75,11 +72,11 @@ export const TransactionForm = ({ form, categories, accounts, onSubmit, onClose 
                 <select
                     name="account_id"
                     value={data.account_id ?? ''}
-                    onChange={e => setData('account_id', e.target.value)}
+                    onChange={e => setData('account_id', Number(e.target.value))}
                     required
                     className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
                 >
-                    <option value="">Selecione uma conta</option>
+                    <option value={0}>Selecione uma conta</option>
                     {accounts.map(acc => (
                         <option key={acc.id} value={acc.id}>{acc.name}</option>
                     ))}
@@ -89,17 +86,18 @@ export const TransactionForm = ({ form, categories, accounts, onSubmit, onClose 
 
             <div>
                 <label className="block mb-1 text-sm font-medium text-white">Value (R$)</label>
-                <Input
-                    type="text"
-                    inputMode="decimal"
-                    value={data.value}
-                    onChange={(e) => {
-                        const raw = e.target.value.replace(/\D/g, '');
-                        const formatted = (Number(raw) / 100).toFixed(2).replace('.', ',');
-                        setData('value', formatted);
-                    }}
-                    placeholder="0,00"
+                <NumericFormat
                     className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
+                    value={form.data.value ?? ''}
+                    thousandSeparator="."
+                    decimalSeparator=","
+                    decimalScale={2}
+                    fixedDecimalScale={true}
+                    allowNegative={false}
+                    placeholder="Digite o saldo inicial"
+                    onValueChange={(values) => {
+                        form.setData('value', values.value === '' ? 0 : Number(values.value));
+                    }}
                 />
                 {errors.value && <p className="text-red-500 text-sm mt-1">{errors.value}</p>}
             </div>

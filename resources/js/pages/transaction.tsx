@@ -8,14 +8,12 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Pagination } from '@/components/pagination';
 import { Transaction as TransactionEntity, TransactionType } from '@/types/entities/Transaction';
-import { Button } from '@/components/ui/button';
-import { PlusIcon } from 'lucide-react';
-import { Modal } from '@/components/modal';
-import { TransactionForm } from '@/components/Form/Transaction/TransactionForm';
 import { TransactionCreate } from '@/components/Form/Transaction/TransactionCreate';
 
 import type { Category } from '@/types/entities/Category';
 import type { Account } from '@/types/entities/Account';
+import { Action } from '@/components/action';
+import { TransactionEdit } from '@/components/Form/Transaction/TransactionEdit';
 
 interface TransactionPageProps {
     items: { data: TransactionEntity[] };
@@ -56,9 +54,17 @@ export const columns: ColumnDef<TransactionEntity>[] = [
         header: 'Date',
         cell: info => new Date(info.getValue() as string).toLocaleDateString(),
     },
+    {
+        accessorKey: 'actions',
+        header: 'Actions',
+        cell: info =>
+            <Action>
+                <TransactionEdit transaction={info.row.original}/>
+            </Action>,
+    },
 ];
 
-export default function Transaction({ items, categories, accounts }: TransactionPageProps) {
+export default function Transaction({ categories, accounts }: TransactionPageProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Transaction',
@@ -72,7 +78,7 @@ export default function Transaction({ items, categories, accounts }: Transaction
             <div className="space-y-4">
                 <div className={'flex justify-between py-3'}>
                     <div></div>
-                    <TransactionCreate categories={categories} accounts={accounts} />
+                    <TransactionCreate accounts={accounts} categories={categories}/>
                 </div>
                 <Table columns={columns} />
                 <Pagination />

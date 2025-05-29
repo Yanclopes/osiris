@@ -2,30 +2,36 @@ import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { Modal } from '@/components/modal';
 import { useForm } from '@inertiajs/react';
-import { CategoryForm } from './CategoryForm';
-import { Category } from '@/types/entities/Category';
+import { AccountForm } from './AccountForm';
+import { Account } from '@/types/entities/Account';
 
-export const CategoryCreate = () => {
-    const form = useForm<Pick<Category, 'description' | 'name'>>({
+interface AccountCreateProps
+{
+    accountTypes: [number, string][]
+}
+export const AccountCreate = ({ accountTypes }: AccountCreateProps) => {
+    const form = useForm<Pick<Account, 'type' | 'name' | 'balance'>>({
         name: '',
-        description: '',
+        type: 0,
+        balance: 0,
     });
 
     return (
         <Modal
-            title="Nova Categoria"
+            title="New Account"
             trigger={
                 <Button>
                     <PlusIcon className="w-4 h-4 mr-2" />
-                    Add Category
+                    Add Account
                 </Button>
             }
         >
             {(close) => (
-                <CategoryForm
+                <AccountForm
                     form={form}
+                    accountTypes={accountTypes}
                     onSubmit={() => {
-                        form.post('/category', {
+                        form.post('/account', {
                             onSuccess: () => {
                                 close();
                                 form.reset();

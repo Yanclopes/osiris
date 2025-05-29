@@ -1,10 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { InertiaFormProps } from '@inertiajs/react';
-import { CategoryFormData } from './CategoryCreate';
-
+import { Category } from '@/types/entities/Category';
 
 interface CategoryFormProps {
-    form: InertiaFormProps<CategoryFormData>;
+    form: InertiaFormProps<Pick<Category, 'description' | 'name'>>;
     onSubmit: () => void;
     onClose: () => void;
 }

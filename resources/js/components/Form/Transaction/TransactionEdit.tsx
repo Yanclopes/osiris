@@ -1,33 +1,37 @@
 import { Button } from '@/components/ui/button';
-import { PlusIcon } from 'lucide-react';
+import { PenIcon } from 'lucide-react';
 import { TransactionForm } from '@/components/Form/Transaction/TransactionForm';
 import { Modal } from '@/components/modal';
-import { useForm } from '@inertiajs/react';
-import { Transaction, TransactionType } from '@/types/entities/Transaction';
-import type { Category } from '@/types/entities/Category';
-import type { Account } from '@/types/entities/Account';
+import { useForm, usePage } from '@inertiajs/react';
+import { Transaction } from '@/types/entities/Transaction';
+import { Category } from '@/types/entities/Category';
+import { Account } from '@/types/entities/Account';
 
 interface TransactionCreateProps {
-    categories: Category[];
-    accounts: Account[];
+    transaction: Transaction
 }
 
-export const TransactionCreate = ({ categories, accounts }: TransactionCreateProps) => {
+export const TransactionEdit = ({ transaction }: TransactionCreateProps) => {
     const form = useForm<Pick<Transaction, 'account_id' | 'type' | 'category_id' | 'description' | 'value'>>({
-        account_id: 0,
-        type: TransactionType.EXPENSE,
-        value: 0,
-        description: '',
-        category_id: 0,
+        account_id: transaction.account_id,
+        type: transaction.type,
+        value: transaction.value,
+        description: transaction.description,
+        category_id: transaction.category_id,
     });
+
+    const { categories, accounts } = usePage<{
+        categories: Category[]
+        accounts: Account[]
+    }>().props
 
     return (
         <Modal
-            title="Nova Transação"
+            title="Editar Transação"
             trigger={
                 <Button>
-                    <PlusIcon className="w-4 h-4 mr-2" />
-                    Add Transaction
+                    <PenIcon className="w-4 h-4 mr-2" />
+                    Editar
                 </Button>
             }
         >

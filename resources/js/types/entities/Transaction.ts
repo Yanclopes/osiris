@@ -8,7 +8,7 @@ export enum TransactionType {
 export interface Transaction {
         id: number;
     type: TransactionType;
-    value: string;
+    value: number;
     description: string;
     account_id: number;
     category_id: number;

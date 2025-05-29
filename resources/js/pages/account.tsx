@@ -6,16 +6,16 @@ import { Head } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Pagination } from '@/components/pagination';
-import { CategoryCreate } from '@/components/Form/Category/CategoryCreate';
+import { AccountCreate } from '@/components/Form/Account/AccountCreate';
 
-type Category = {
+type Account = {
     id: number;
     name: string;
     description?: string;
     created_at: string;
 };
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<Account>[] = [
     {
         accessorKey: 'id',
         header: 'ID',
@@ -27,9 +27,14 @@ export const columns: ColumnDef<Category>[] = [
         cell: info => info.getValue(),
     },
     {
-        accessorKey: 'description',
-        header: 'Description',
+        accessorKey: 'type',
+        header: 'Type',
         cell: info => info.getValue() || '-',
+    },
+    {
+        accessorKey: 'balance',
+        header: 'Balance',
+        cell: info => `R$ ${info.getValue()}`
     },
     {
         accessorKey: 'created_at',
@@ -37,21 +42,26 @@ export const columns: ColumnDef<Category>[] = [
         cell: info => new Date(info.getValue() as string).toLocaleDateString(),
     },
 ];
-export default function Category() {
+
+interface AccountProps {
+    accountTypes: [number, string][]
+}
+
+export default function Account({ accountTypes }: AccountProps) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Category',
-            href: '/category',
+            title: 'Account',
+            href: '/account',
         },
     ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Category" />
+            <Head title="Account" />
             <div className="space-y-4">
                 <div className={'flex justify-between py-3'}>
                     <div></div>
-                    <CategoryCreate />
+                    <AccountCreate accountTypes={accountTypes}/>
                 </div>
                 <Table columns={columns} />
                 <Pagination />
