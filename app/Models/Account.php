@@ -22,6 +22,16 @@ class Account extends Model {
         return $this->hasMany(Transaction::class);
     }
 
+    public function updateBalance(Transaction $transaction)
+    {
+        if (Transaction::INCOME === $transaction->type) {
+            $this->balance += $transaction->value;
+            return $this->save();
+        }
+        $this->balance -= $transaction->value;
+        return $this->save();
+    }
+
     static function getTypeList()
     {
         return [

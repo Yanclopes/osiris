@@ -11,45 +11,57 @@ use App\Models\Transaction;
 
 class TransactionController extends Controller
 {
-    public function index()
-{
-    $userId = Auth::id();
-    
-    $categories = Category::where('user_id', $userId)->get();
-    $accounts = Account::where('user_id', $userId)->get();
+    public function index(Request $request)
+    {
+        $userId = Auth::id();
 
-    $transactions = Transaction::with('category')
-    ->whereHas('account', function ($query) use ($userId) {
-        $query->where('user_id', $userId);
-    })
-    ->paginate(10);
+        $categories = Category::where('user_id', $userId)->get();
+        $accounts = Account::where('user_id', $userId)->get();
+        $accountFilter = $request->query('account');
+        $categoryFilter = $request->query('category');
 
-    return Inertia::render('transaction', [
-        'items' => $transactions,
-        'categories' => $categories,
-        'accounts' => $accounts,
-    ]);
-}
+        $transactions = Transaction::with('category')
+            ->whereHas('account', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->when($accountFilter, function ($query, $account) {
+                $query->where('account_id', $account);
+            })
+            ->when($categoryFilter, function ($query, $category) {
+                $query->where('category_id', $category);
+            })
+            ->paginate(10);
+
+        return Inertia::render('transaction', [
+            'items' => $transactions,
+            'categories' => $categories,
+            'accounts' => $accounts,
+        ]);
+    }
 
     public function store(Request $request)
     {
         $userId = Auth::id();
 
         $validated = $request->validate([
-            'account_id' => 'required|exists:accounts,id', // aqui!
+            'account_id' => 'required|exists:accounts,id',
             'type' => 'required|in:income,expense',
-            'value' => 'required|string',
+            'value' => 'required|numeric',
             'description' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        Transaction::create([
-            'account_id' => $validated['account_id'], // aqui!
+        $transaction = Transaction::create([
+            'account_id' => $validated['account_id'],
             'category_id' => $validated['category_id'],
             'type' => $validated['type'],
             'value' => (float) str_replace(',', '.', $validated['value']),
             'description' => $validated['description'],
         ]);
+
+        $account = Account::find($validated['account_id']);
+
+        $account->updateBalance($transaction);
 
         return redirect()->back()->with('success', 'Transaction created successfully!');
     }

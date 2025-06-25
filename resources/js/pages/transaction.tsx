@@ -14,6 +14,8 @@ import type { Category } from '@/types/entities/Category';
 import type { Account } from '@/types/entities/Account';
 import { Action } from '@/components/action';
 import { TransactionEdit } from '@/components/Form/Transaction/TransactionEdit';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useParams } from '@/utils/useParams';
 
 interface TransactionPageProps {
     items: { data: TransactionEntity[] };
@@ -65,6 +67,7 @@ export const columns: ColumnDef<TransactionEntity>[] = [
 ];
 
 export default function Transaction({ categories, accounts }: TransactionPageProps) {
+    const [params, setParams] = useParams()
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Transaction',
@@ -77,7 +80,42 @@ export default function Transaction({ categories, accounts }: TransactionPagePro
             <Head title="Transaction" />
             <div className="space-y-4">
                 <div className={'flex justify-between py-3'}>
-                    <div></div>
+                    <div className={'flex gap-3'}>
+                        <Select
+                            value={params.category}
+                            onValueChange={(value) => setParams({ category: value})}
+                        >
+                            <SelectTrigger className="w-[200px]">
+                                <SelectValue placeholder="Filtrar por categoria" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectItem value="0">Todos</SelectItem>
+                                {categories.map((category) => (
+                                    <SelectItem key={category.id} value={String(category.id)}>
+                                        {category.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <Select
+                            value={params.account}
+                            onValueChange={(value) => setParams({ account: value})}
+                        >
+                            <SelectTrigger className="w-[200px]">
+                                <SelectValue placeholder="Filtrar por conta" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectItem value="0">Todos</SelectItem>
+                                {accounts.map((account) => (
+                                    <SelectItem key={account.id} value={String(account.id)}>
+                                        {account.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
                     <TransactionCreate accounts={accounts} categories={categories}/>
                 </div>
                 <Table columns={columns} />
