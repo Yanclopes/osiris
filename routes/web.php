@@ -17,6 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     Route::get('transaction', [\App\Http\Controllers\TransactionController::class, 'index'])->name('transaction');
     Route::post('transaction', [\App\Http\Controllers\TransactionController::class, 'store'])->name('transaction.store');
+    Route::put('transaction/{id}', [\App\Http\Controllers\TransactionController::class, 'update'])->name('transaction.update');
 
     Route::get('category', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category');
     Route::post('category', [\App\Http\Controllers\CategoryController::class, 'store'])->name('category.store');

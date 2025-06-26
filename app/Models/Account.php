@@ -32,6 +32,16 @@ class Account extends Model {
         return $this->save();
     }
 
+    public function revertBalance(Transaction $transaction)
+    {
+        if ($transaction->type === 'income') {
+            $this->balance -= $transaction->value;
+        } else {
+            $this->balance += $transaction->value;
+        }
+        $this->save();
+    }
+
     static function getTypeList()
     {
         return [

@@ -41,12 +41,12 @@ export const TransactionEdit = ({ transaction }: TransactionCreateProps) => {
                     categories={categories}
                     accounts={accounts}
                     onSubmit={() => {
-                        form.post('/transaction', {
-                            onSuccess: () => {
-                                close();
-                                form.reset();
-                            },
-                        });
+                    form.put(`/transaction/${transaction.id}`, {
+                        onSuccess: () => {
+                            close();
+                            form.reset();
+                        },
+                    });
                     }}
                     onClose={() => {
                         close();

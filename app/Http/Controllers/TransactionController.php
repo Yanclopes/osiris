@@ -62,7 +62,29 @@ class TransactionController extends Controller
         $account = Account::find($validated['account_id']);
 
         $account->updateBalance($transaction);
-
+        
         return redirect()->back()->with('success', 'Transaction created successfully!');
+    }
+    
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'account_id' => 'required|exists:accounts,id',
+            'type' => 'required|in:income,expense',
+            'value' => 'required|numeric',
+            'description' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+        
+        $transaction = Transaction::findOrFail($id);
+        $account = Account::find($transaction->account_id);
+
+        $account->revertBalance($transaction);
+
+        $transaction->update($validated);
+
+        $account->updateBalance($transaction);
+
+        return redirect()->back()->with('success', 'Transaction updated successfully!');
     }
 }
