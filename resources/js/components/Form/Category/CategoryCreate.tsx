@@ -13,7 +13,7 @@ export const CategoryCreate = () => {
 
     return (
         <Modal
-            title="Nova Categoria"
+            title="New Category"
             trigger={
                 <Button>
                     <PlusIcon className="w-4 h-4 mr-2" />

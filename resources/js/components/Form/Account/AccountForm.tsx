@@ -19,7 +19,7 @@ export const AccountForm = ({ form, onSubmit, onClose, accountTypes }: CategoryF
         className="space-y-4"
     >
         <div>
-            <label className="block mb-1 text-sm font-medium text-white">Nome</label>
+            <label className="block mb-1 text-sm font-medium text-white">Name</label>
             <input
                 className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
                 type="text"
@@ -31,7 +31,7 @@ export const AccountForm = ({ form, onSubmit, onClose, accountTypes }: CategoryF
         </div>
 
         <div>
-            <label className="block mb-1 text-sm font-medium text-white">Saldo</label>
+            <label className="block mb-1 text-sm font-medium text-white">Balance</label>
             <NumericFormat
                 className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
                 value={form.data.balance ?? ''}
@@ -47,7 +47,7 @@ export const AccountForm = ({ form, onSubmit, onClose, accountTypes }: CategoryF
             />
         </div>
         <div>
-            <label className="block mb-1 text-sm font-medium text-white">Tipo</label>
+            <label className="block mb-1 text-sm font-medium text-white">Type</label>
             <select
                 className="w-full border rounded-md p-2 bg-black text-white border-white"
                 value={form.data.type ?? ''}
@@ -68,14 +68,14 @@ export const AccountForm = ({ form, onSubmit, onClose, accountTypes }: CategoryF
                 type="reset"
                 disabled={form.processing}
             >
-                Cancelar
+                Cancel
             </Button>
             <Button
                 type="submit"
                 variant="default"
                 disabled={form.processing}
             >
-                {form.processing ? 'Salvando...' : 'Salvar'}
+                {form.processing ? 'Salving...' : 'Save'}
             </Button>
         </div>
     </form>

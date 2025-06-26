@@ -12,9 +12,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('transaction', [\App\Http\Controllers\TransactionController::class, 'index'])->name('transaction');
     Route::post('transaction', [\App\Http\Controllers\TransactionController::class, 'store'])->name('transaction.store');
     Route::put('transaction/{id}', [\App\Http\Controllers\TransactionController::class, 'update'])->name('transaction.update');

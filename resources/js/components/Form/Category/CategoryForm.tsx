@@ -17,7 +17,7 @@ export const CategoryForm = ({ form, onSubmit, onClose }: CategoryFormProps) => 
         className="space-y-4"
     >
         <div>
-            <label className="block mb-1 text-sm font-medium text-white">Nome</label>
+            <label className="block mb-1 text-sm font-medium text-white">Name</label>
             <input
                 className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
                 type="text"
@@ -28,7 +28,7 @@ export const CategoryForm = ({ form, onSubmit, onClose }: CategoryFormProps) => 
             />
         </div>
         <div>
-            <label className="block mb-1 text-sm font-medium text-white">Descrição</label>
+            <label className="block mb-1 text-sm font-medium text-white">Description</label>
             <input
                 className="w-full border rounded-md p-2 bg-black text-white border-white placeholder-gray-400"
                 type="text"
@@ -44,14 +44,14 @@ export const CategoryForm = ({ form, onSubmit, onClose }: CategoryFormProps) => 
                 type="reset"
                 disabled={form.processing}
             >
-                Cancelar
+                Cancel
             </Button>
             <Button
                 type="submit"
                 variant="default"
                 disabled={form.processing}
             >
-                {form.processing ? 'Salvando...' : 'Salvar'}
+                {form.processing ? 'Saving...' : 'Save'}
             </Button>
         </div>
     </form>

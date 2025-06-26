@@ -23,7 +23,7 @@ export const TransactionCreate = ({ categories, accounts }: TransactionCreatePro
 
     return (
         <Modal
-            title="Nova Transação"
+            title="New Transaction"
             trigger={
                 <Button>
                     <PlusIcon className="w-4 h-4 mr-2" />

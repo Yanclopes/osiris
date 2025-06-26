@@ -86,7 +86,7 @@ export default function Transaction({ categories, accounts }: TransactionPagePro
                             onValueChange={(value) => setParams({ category: value})}
                         >
                             <SelectTrigger className="w-[200px]">
-                                <SelectValue placeholder="Filtrar por categoria" />
+                                <SelectValue placeholder="Filter by category" />
                             </SelectTrigger>
 
                             <SelectContent>
@@ -103,7 +103,7 @@ export default function Transaction({ categories, accounts }: TransactionPagePro
                             onValueChange={(value) => setParams({ account: value})}
                         >
                             <SelectTrigger className="w-[200px]">
-                                <SelectValue placeholder="Filtrar por conta" />
+                                <SelectValue placeholder="Filter by account" />
                             </SelectTrigger>
 
                             <SelectContent>

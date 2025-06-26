@@ -27,11 +27,11 @@ export const TransactionEdit = ({ transaction }: TransactionCreateProps) => {
 
     return (
         <Modal
-            title="Editar Transação"
+            title="Edit Transaction"
             trigger={
                 <Button>
                     <PenIcon className="w-4 h-4 mr-2" />
-                    Editar
+                    Edit
                 </Button>
             }
         >
